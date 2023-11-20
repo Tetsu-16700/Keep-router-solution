@@ -1,7 +1,9 @@
+import { redirect } from "react-router-dom";
+import { authProvider } from "../auth";
 import { URL_BASE, tokenKey } from "../constants";
 
 export async function getNotes() {
-  const token = window.localStorage.getItem(tokenKey);
+  const token = authProvider.token;
 
   const url = `${URL_BASE}/notes`;
   const options = {
@@ -13,13 +15,13 @@ export async function getNotes() {
   const response = await fetch(url, options);
 
   if (response.ok) {
-    return response.json();
+    const body = await response.json();
+    return body.data;
   }
 
   if (response.status === 401) {
-    window.localStorage.removeItem(tokenKey);
-    window.location.reload();
-    return;
+    authProvider.logout();
+    throw redirect("/login");
   }
 
   const body = await response.json();
@@ -42,13 +44,13 @@ export async function createNote(noteData) {
   const response = await fetch(url, options);
 
   if (response.ok) {
-    return response.json();
+    const body = await response.json();
+    return body.data;
   }
 
   if (response.status === 401) {
-    window.localStorage.removeItem(tokenKey);
-    window.location.reload();
-    return;
+    authProvider.logout();
+    throw redirect("/login");
   }
 
   const body = await response.json();
@@ -72,13 +74,13 @@ export async function editNote(id, updateData) {
   const response = await fetch(url, options);
 
   if (response.ok) {
-    return response.json();
+    const body = await response.json();
+    return body.data;
   }
 
   if (response.status === 401) {
-    window.localStorage.removeItem(tokenKey);
-    window.location.reload();
-    return;
+    authProvider.logout();
+    throw redirect("/login");
   }
 
   const body = await response.json();
@@ -99,13 +101,13 @@ export async function deleteNote(id) {
   const response = await fetch(url, options);
 
   if (response.ok) {
-    return response.json();
+    const body = await response.json();
+    return body.ok;
   }
 
   if (response.status === 401) {
-    window.localStorage.removeItem(tokenKey);
-    window.location.reload();
-    return;
+    authProvider.logout();
+    throw redirect("/login");
   }
 
   const body = await response.json();

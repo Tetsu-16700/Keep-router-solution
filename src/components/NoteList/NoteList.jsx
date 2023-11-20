@@ -1,8 +1,15 @@
 import clsx from "clsx";
 import styles from "./styles.module.css";
 import Note from "../Note/Note";
+import { useLocation, useRouteLoaderData } from "react-router-dom";
 
-function NoteList({ className, notes, onDeleteNote, onEditNote, isTrash }) {
+function NoteList({ className }) {
+  const { activeNotes, deletedNotes } = useRouteLoaderData("app");
+  const location = useLocation();
+  const isTrash = location.pathname.includes("trash");
+
+  const notes = isTrash ? deletedNotes : activeNotes;
+
   const containerClassNames = clsx(className, styles.container);
 
   if (notes.length === 0) {
@@ -12,13 +19,7 @@ function NoteList({ className, notes, onDeleteNote, onEditNote, isTrash }) {
   return (
     <div className={containerClassNames}>
       {notes.map((note) => (
-        <Note
-          key={note.id}
-          note={note}
-          onEditNote={onEditNote}
-          onDeleteNote={onDeleteNote}
-          isTrash={isTrash}
-        />
+        <Note key={note.id} note={note} isTrash={isTrash} />
       ))}
     </div>
   );

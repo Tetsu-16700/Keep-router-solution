@@ -1,10 +1,11 @@
 import clsx from "clsx";
 import styles from "./styles.module.css";
-import { useAuth } from "../../contexts/authContext";
+import { useFetcher } from "react-router-dom";
 
 function Header({ username, className }) {
-  const { logout } = useAuth();
+  const fetcher = useFetcher();
   const headerClassNames = clsx(className, styles.container);
+  const isSubmitting = fetcher.state === "submitting";
 
   return (
     <header className={headerClassNames}>
@@ -12,9 +13,11 @@ function Header({ username, className }) {
         Welcome to Codeable Keep{" "}
         <span className={styles.username}>{username}</span>
       </div>
-      <button onClick={logout} className={styles.button}>
-        Exit
-      </button>
+      <fetcher.Form method="POST" action="logout">
+        <button className={styles.button} disabled={isSubmitting}>
+          Exit
+        </button>
+      </fetcher.Form>
     </header>
   );
 }

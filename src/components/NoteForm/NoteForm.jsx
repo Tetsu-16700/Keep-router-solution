@@ -1,6 +1,7 @@
 import * as React from "react";
 import styles from "./styles.module.css";
 import ColorPicker from "../ColorPicker";
+import { Form, useNavigation, useOutletContext } from "react-router-dom";
 
 const initialValues = {
   title: "",
@@ -8,41 +9,31 @@ const initialValues = {
   color: "#FFFFFF",
 };
 
-function NoteForm({ onAddNote }) {
+function NoteForm() {
   const [formData, setFormData] = React.useState(initialValues);
-  const [status, setStatus] = React.useState("idle");
-  const [error, setError] = React.useState(null);
-
-  const isSubmitting = status === "submitting";
-
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    setStatus("submitting");
-    setError(null);
-    onAddNote(formData)
-      .then(() => {
-        setStatus("idle");
-        setFormData(initialValues);
-      })
-      .catch((error) => {
-        console.log(error);
-        setError(error.message);
-        setStatus("idle");
-      });
-  }
+  const navigation = useNavigation();
+  const error = useOutletContext();
+  const isSubmitting = Boolean(navigation.formMethod);
 
   function handleChange(event) {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   }
 
+  React.useEffect(() => {
+    if (navigation.state === "idle" && !error) {
+      setFormData(initialValues);
+    }
+  }, [navigation.state, error]);
+
   return (
-    <form
+    <Form
+      method="POST"
+      action="/"
       className={styles.form}
-      onSubmit={handleSubmit}
       style={{ backgroundColor: formData.color }}
     >
+      <input type="hidden" name="color" value={formData.color} />
       <input
         type="text"
         name="title"
@@ -69,7 +60,7 @@ function NoteForm({ onAddNote }) {
         </button>
       </div>
       {error && <p className={styles.error}>{error}</p>}
-    </form>
+    </Form>
   );
 }
 

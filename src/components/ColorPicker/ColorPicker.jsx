@@ -15,7 +15,7 @@ const colors = [
   "#FDCFE8",
 ];
 
-function ColorPicker({ name, onChange }) {
+function ColorPicker({ name, onChange = () => {} }) {
   const [showColors, setShowColors] = React.useState(false);
 
   function handleClick(event) {

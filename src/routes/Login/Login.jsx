@@ -1,33 +1,34 @@
-import * as React from "react";
 import styles from "./styles.module.css";
-import { useAuth } from "../../contexts/authContext";
+import { authProvider } from "../../auth";
+import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 
-function Welcome() {
-  const { login } = useAuth();
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState(false);
-  const [status, setStatus] = React.useState("idle");
+export async function action({ request }) {
+  let formData = await request.formData();
+  let username = formData.get("username");
+  let password = formData.get("password");
 
-  const isSubmitting = status === "submitting";
-
-  async function handleSubmit(event) {
-    event.preventDefault();
-    setError(false);
-    setStatus("submitting");
-
-    try {
-      await login(username, password);
-    } catch (error) {
-      setError(true);
-      setStatus("idle");
-    }
+  try {
+    await authProvider.login(username, password);
+  } catch (error) {
+    return {
+      error: "Invalid login attempt",
+    };
   }
+
+  let redirectTo = formData.get("redirectTo");
+  return redirect(redirectTo || "/");
+}
+
+function Login() {
+  const actionData = useActionData();
+  const navigation = useNavigation();
+
+  const isSubmitting = navigation.state === "submitting";
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Welcome to Codeable Keep</h1>
-      <form className={styles.form} onSubmit={handleSubmit}>
+      <Form className={styles.form} method="POST">
         <div className={styles["input-group"]}>
           <label htmlFor="username" className={styles.label}>
             username
@@ -39,8 +40,6 @@ function Welcome() {
             name="username"
             required
             className={styles.input}
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
             disabled={isSubmitting}
           />
         </div>
@@ -54,18 +53,18 @@ function Welcome() {
             name="password"
             required
             className={styles.input}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
             disabled={isSubmitting}
           />
         </div>
         <button type="submit" className={styles.button} disabled={isSubmitting}>
           {isSubmitting ? "Entering..." : "Enter"}
         </button>
-        {error && <p className={styles.error}>Invalid Credentials</p>}
-      </form>
+        {actionData?.error && (
+          <p className={styles.error}>Invalid Credentials</p>
+        )}
+      </Form>
     </div>
   );
 }
 
-export default Welcome;
+export default Login;
