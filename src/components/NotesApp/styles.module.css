@@ -1,0 +1,16 @@
+.container {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: 70px 1fr;
+  background-color: hsl(0, 0%, 82%);
+  gap: 2px;
+}
+
+.container > * {
+  background: hsl(0, 0%, 98%);
+}
+
+.header {
+  grid-column: span 2;
+}

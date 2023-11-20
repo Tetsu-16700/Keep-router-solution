@@ -1,0 +1,27 @@
+.container {
+  padding: 16px 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 0;
+  list-style: none;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  cursor: pointer;
+
+  font-size: 18px;
+  line-height: 20px; /* 111.111% */
+  border-radius: 0 25px 25px 0;
+}
+
+.active {
+  background: hsl(0, 0%, 90%);
+}

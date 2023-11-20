@@ -1,0 +1,58 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 590px;
+  width: 100%;
+  padding: 16px;
+  background-color: hsl(0, 0%, 100%);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px; /* 142.857% */
+  border: none;
+  padding: 0 4px;
+  background-color: hsla(0, 0%, 100%, 0.25);
+}
+
+.title::placeholder {
+  color: hsl(0, 0%, 45%);
+}
+
+.body {
+  font-size: 18px;
+  line-height: 24px; /* 133.333% */
+  border: none;
+  padding: 0 4px;
+  background-color: hsla(0, 0%, 100%, 0.25);
+}
+
+.body::placeholder {
+  color: hsl(0, 0%, 45%);
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 18px; /* 100% */
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.error {
+  text-align: center;
+  color: tomato;
+  font-size: 14px;
+}

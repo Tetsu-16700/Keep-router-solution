@@ -1,0 +1,12 @@
+.container {
+  padding: 48px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  height: 100%;
+  align-items: center;
+}
+
+.note-list-container {
+  min-width: 100%;
+}
